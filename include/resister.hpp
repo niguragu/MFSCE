@@ -6,14 +6,13 @@
 class RESISTER
 {
 public:
-   RESISTER()
-   {
-      resisters.fill(0); // constructor
-   }
+   RESISTER();
 
-   void write(const int8_t, const uint32_t); // setter
-   uint32_t read() const;                    // getter
-   void ResistersView() const;
+   void write(const uint8_t &, const uint32_t &); // setter
+
+   const uint32_t &read(uint8_t) const; // getter
+
+   void View() const;
 
 private:
    std::array<uint32_t, 32> resisters;
