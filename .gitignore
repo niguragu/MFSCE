@@ -34,3 +34,6 @@
 
 # Temporary
 main.cpp
+
+# build directory
+build/

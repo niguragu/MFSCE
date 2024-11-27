@@ -24,10 +24,9 @@ const uint32_t &RESISTER::read(uint8_t reg) const
 
 void RESISTER::View() const
 {
-    int i = 0;
-    for (auto &&e : resisters)
+    for (int i = 0; auto &&e : resisters)
     {
-        std::cout << "x" << i << ": "<< e << std::endl;
+        std::cout << "x" << i << ": " << e << std::endl;
         ++i;
     }
 }
