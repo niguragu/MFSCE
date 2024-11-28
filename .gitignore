@@ -37,3 +37,4 @@ main.cpp
 
 # build directory
 build/
+.vscode/

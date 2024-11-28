@@ -7,3 +7,5 @@ include_directories(include)
 add_executable(main src/main.cpp src/resister.cpp)
 
 target_compile_options(main PUBLIC -O2 -Wall)
+
+set(CMAKE_CXX_STANDARD 20)
