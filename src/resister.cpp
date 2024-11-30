@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cstdint>
 #include <array>
+#include <format>
+
 
 RESISTER::RESISTER()
 {
@@ -26,7 +28,7 @@ void RESISTER::View() const
 {
     for (int i = 0; auto &&e : resisters)
     {
-        std::cout << "x" << i << ": " << e << std::endl;
+        std::cout << std::format("x{:02}:{:010}",i,e) << std::endl;
         ++i;
     }
 }
