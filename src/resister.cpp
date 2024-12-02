@@ -24,7 +24,7 @@ const uint32_t &RESISTER::read(uint8_t reg) const
     return resisters[reg];
 }
 
-void RESISTER::View() const
+void RESISTER::view() const
 {
     for (int i = 0; auto &&e : resisters)
     {

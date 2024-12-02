@@ -5,21 +5,21 @@
 #include <format>
 
 
-PC::PC():pc(0)
+PC::PC():pc_(0)
 {
     
 }
 void PC::write(const uint32_t &data)
 {
-    pc = data;
+    pc_ = data;
 }
 
 const uint32_t &PC::read() const
 {
-    return pc;
+    return pc_;
 }
 
-void PC::View() const
+void PC::view() const
 {
-std::cout << std::format("PC:{:010}",pc) << std::endl;
+std::cout << std::format("PC:{:010}",pc_) << std::endl;
 }

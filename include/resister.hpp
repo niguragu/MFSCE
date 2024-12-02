@@ -12,7 +12,7 @@ public:
 
    const uint32_t &read(uint8_t) const; // getter
 
-   void View() const;
+   void view() const;
 
 private:
    std::array<uint32_t, 32> resisters;
