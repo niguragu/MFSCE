@@ -92,7 +92,7 @@ namespace MFSCE
 
     void ALU::view() const
     {
-        std::cout << std::format("operand1:{:010} operand2:{:010} result_:{:010}", operand1_, operand2_, result_) << std::endl;
+        std::cout << std::format("operand1:{:032b} operand2:{:032b} result_:{:032b}", operand1_, operand2_, result_) << std::endl;
     }
 
 } // MFSCE
