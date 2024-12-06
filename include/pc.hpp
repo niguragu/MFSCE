@@ -2,6 +2,9 @@
 
 #include <cstdint>
 
+
+namespace MFSCE{
+
 class PC
 {
 public:
@@ -16,3 +19,5 @@ public:
 private:
     uint32_t pc_;
 };
+
+} // MFSCE

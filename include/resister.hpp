@@ -3,6 +3,9 @@
 #include <cstdint>
 #include <array>
 
+namespace MFSCE
+{
+
 class RESISTER
 {
 public:
@@ -17,3 +20,5 @@ public:
 private:
    std::array<uint32_t, 32> resisters;
 };
+
+} // MFSCE
