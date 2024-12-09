@@ -25,7 +25,8 @@ namespace MFSCE
 
     private:
         std::map<uint32_t, uint8_t> mem_;
-        uint32_t main_memory_, IO_device_;
+        uint32_t main_memory_ = 0x0FFFFFFF;
+        uint32_t IO_device_ = 0x10000FFF;
         bool alignmentCheck(uint32_t, uint8_t);
     };
 } //  MFSCE

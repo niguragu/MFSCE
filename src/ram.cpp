@@ -3,13 +3,12 @@
 #include <iostream>
 #include <format>
 #include <cstdint>
-#include <array>
 #include <map>
 
 namespace MFSCE
 {
 
-    RAM::RAM() : main_memory_(0x0FFFFFFF), IO_device_(0x10000FFF)
+    RAM::RAM()
     {
     }
 
@@ -58,6 +57,14 @@ namespace MFSCE
         sb(address + 1, (data >> 8) & 0xff);
         sb(address + 2, (data >> 16) & 0xff);
         sb(address + 3, (data >> 24) & 0xff);
+    }
+
+    void RAM::view() const
+    {
+        for (auto &&[key, value] : mem_)
+        {
+            std::cout << std::format("[addr]{:08x}:{:02x}", key, value) << std::endl;
+        }
     }
 
     bool RAM::alignmentCheck(uint32_t address, uint8_t alignment)
