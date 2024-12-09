@@ -10,12 +10,12 @@ namespace MFSCE
     PC::PC() : pc_(0)
     {
     }
-    void PC::write(const uint32_t &data)
+    void PC::write(uint32_t data)
     {
         pc_ = data;
     }
 
-    const uint32_t &PC::read() const
+    const uint32_t PC::read() const
     {
         return pc_;
     }

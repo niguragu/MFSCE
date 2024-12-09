@@ -10,25 +10,25 @@ namespace MFSCE
 
     RESISTER::RESISTER()
     {
-        resisters.fill(0);
+        resisters_.fill(0);
     }
-    void RESISTER::write(const uint8_t &reg, const uint32_t &data)
+    void RESISTER::write(uint8_t reg, uint32_t data)
     {
         if (reg == 0)
         {
         }
         else if (reg < 32)
-            resisters[reg] = data;
+            resisters_[reg] = data;
     }
 
     const uint32_t &RESISTER::read(uint8_t reg) const
     {
-        return resisters[reg];
+        return resisters_[reg];
     }
 
     void RESISTER::view() const
     {
-        for (int i = 0; auto &&e : resisters)
+        for (int i = 0; auto &&e : resisters_)
         {
             std::cout << std::format("x{:02}:{:010}", i, e) << std::endl;
             ++i;

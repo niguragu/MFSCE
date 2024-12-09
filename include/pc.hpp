@@ -2,22 +2,22 @@
 
 #include <cstdint>
 
-
-namespace MFSCE{
-
-class PC
+namespace MFSCE
 {
-public:
-    PC();
 
-    void write(const uint32_t &); // setter
+    class PC
+    {
+    public:
+        PC();
 
-    const uint32_t &read() const; // getter
+        void write(uint32_t); // setter
 
-    void view() const;
+        const uint32_t read() const; // getter
 
-private:
-    uint32_t pc_;
-};
+        void view() const;
+
+    private:
+        uint32_t pc_;
+    };
 
 } // MFSCE

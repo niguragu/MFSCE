@@ -11,20 +11,21 @@ namespace MFSCE
     public:
         RAM();
 
-        //load instruction
-        void lh();
-        void lh();
-        void lw();
-        void lbu();
-        void lhu();
+        // load instruction
+        uint32_t lb(uint32_t) const;
+        uint32_t lh(uint32_t) const;
+        uint32_t lw(uint32_t) const;
 
-        //store instruction
-        void sb();
-        void sh();
-        void sw();
+        // store instruction
+        void sb(uint32_t, uint32_t);
+        void sh(uint32_t, uint32_t);
+        void sw(uint32_t, uint32_t);
 
+        void view() const;
 
     private:
-    std::map<uint32_t,uint32_t> mem_;
+        std::map<uint32_t, uint8_t> mem_;
+        uint32_t main_memory_, IO_device_;
+        bool alignmentCheck(uint32_t, uint8_t);
     };
-} // namespace MFSCE
+} //  MFSCE

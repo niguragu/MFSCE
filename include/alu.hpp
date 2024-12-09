@@ -11,9 +11,9 @@ namespace MFSCE
     public:
         ALU();
 
-        void set(const uint32_t &, const uint32_t &); // setter
+        void set(const uint32_t, const uint32_t); // setter
 
-        const uint32_t &get() const; // getter
+        const uint32_t get() const; // getter
 
         // arithmetic instruction
         void add();
@@ -33,7 +33,6 @@ namespace MFSCE
         uint32_t operand1_;
         uint32_t operand2_;
         uint32_t result_;
-        bool result_flag_;
     };
 
 } // MFSCE

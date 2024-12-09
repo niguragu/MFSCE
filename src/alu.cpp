@@ -9,16 +9,16 @@
 namespace MFSCE
 {
 
-    ALU::ALU() : operand1_(0), operand2_(0), result_(0), result_flag_(0)
+    ALU::ALU() : operand1_(0), operand2_(0), result_(0)
     {
     }
-    void ALU::set(const uint32_t &operand1, const uint32_t &operand2)
+    void ALU::set(uint32_t operand1, uint32_t operand2)
     {
         operand1_ = operand1;
         operand2_ = operand2;
     }
 
-    const uint32_t &ALU::get() const
+    const uint32_t ALU::get() const
     {
         return result_;
     }
