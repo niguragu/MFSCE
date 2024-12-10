@@ -21,7 +21,7 @@ namespace MFSCE
             resisters_[reg] = data;
     }
 
-    const uint32_t &RESISTER::read(uint8_t reg) const
+    const uint32_t RESISTER::read(uint8_t reg) const
     {
         return resisters_[reg];
     }

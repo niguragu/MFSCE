@@ -24,7 +24,7 @@ namespace MFSCE
 
     uint32_t RAM::lw(uint32_t address) const
     {
-        return (lb(address + 2) << 16 | lb(address));
+        return (lh(address + 2) << 16 | lh(address));
     }
 
     void RAM::sb(uint32_t address, uint32_t data)
@@ -43,6 +43,8 @@ namespace MFSCE
     {
         if (!alignmentCheck(address, 2))
         {
+            std::cerr << "Alignment violation: Address must be 2-byte aligned for 'sh'" << std::endl;
+            return;
         }
         sb(address + 0, (data >> 0) & 0xff);
         sb(address + 1, (data >> 8) & 0xff);
@@ -52,6 +54,8 @@ namespace MFSCE
     {
         if (!alignmentCheck(address, 4))
         {
+            std::cerr << "Alignment violation: Address must be 4-byte aligned for 'sw'" << std::endl;
+            return;
         }
         sb(address + 0, (data >> 0) & 0xff);
         sb(address + 1, (data >> 8) & 0xff);
