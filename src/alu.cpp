@@ -57,7 +57,7 @@ namespace MFSCE
     void ALU::sra()
     {
         auto shiftCount = operand2_ & 0b11111;
-        result_ = static_cast<uint32_t>((static_cast<int32_t>(operand1_)) >> shiftCount);
+        result_ = static_cast<uint32_t>(static_cast<int32_t>(operand1_) >> shiftCount);
     }
 
     void ALU::srl()
