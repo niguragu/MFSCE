@@ -26,10 +26,10 @@ namespace MFSCE
         void setInstructionType(uint32_t);
         Instruction get() const;
         void view() const;
+        Instruction inst;
 
     private:
-        Instruction inst;
-        uint32_t singExtention(uint32_t);
+        uint32_t signExtention(uint32_t);
     };
 
 } // MFSCE

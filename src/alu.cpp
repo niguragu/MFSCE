@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <array>
 #include <format>
-#include <bitset>
 
 namespace MFSCE
 {

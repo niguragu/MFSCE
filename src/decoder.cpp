@@ -3,7 +3,6 @@
 #include <iostream>
 #include <format>
 #include <cstdint>
-#include <bitset>
 
 namespace MFSCE
 {
@@ -33,7 +32,7 @@ namespace MFSCE
             inst.rs2 = 0;
             inst.funct7 = 0;
             inst.imm = (instruction >> 20) & 0xFFF;
-            inst.imm = singExtention(inst.imm << 20 >> 20);
+            inst.imm = signExtention(inst.imm << 20 >> 20);
             break;
         }
         case 0b0100011: // S-type
@@ -44,7 +43,7 @@ namespace MFSCE
             inst.rs2 = (instruction >> 20) & 0x1F;
             inst.funct7 = (instruction >> 25) & 0x7F;
             inst.imm = ((instruction >> 25) << 5) | ((instruction >> 7) & 0x1F);
-            inst.imm = singExtention(inst.imm << 20 >> 20);
+            inst.imm = signExtention(inst.imm << 20 >> 20);
             break;
         }
         case 0b1100011: // B-type
@@ -58,7 +57,7 @@ namespace MFSCE
                         (((instruction >> 7) & 0x1) << 11) |
                         (((instruction >> 25) & 0x3F) << 5) |
                         (((instruction >> 8) & 0xF) << 1);
-            inst.imm = singExtention(inst.imm << 19 >> 19);
+            inst.imm = signExtention(inst.imm << 19 >> 19);
             break;
         }
         case 0b0110111: // U-type
@@ -82,9 +81,12 @@ namespace MFSCE
                         (((instruction >> 12) & 0xFF) << 12) |
                         (((instruction >> 20) & 0x1) << 11) |
                         (((instruction >> 21) & 0x3FF) << 1);
-            inst.imm = singExtention(inst.imm << 11 >> 11);
+            inst.imm = signExtention(inst.imm << 11 >> 11);
             break;
         }
+        default:
+        std::cerr << "Undefined Instruction" << std::endl;
+        break;
         }
     }
     Instruction DECODER::get() const
@@ -101,7 +103,7 @@ namespace MFSCE
         std::cout << std::format("funct7: {:b}", inst.funct7) << std::endl;
         std::cout << std::format("imm: {:b}", inst.imm) << std::endl;
     }
-    uint32_t DECODER::singExtention(uint32_t value)
+    uint32_t DECODER::signExtention(uint32_t value)
     {
         return static_cast<uint32_t>(static_cast<int32_t>(value));
     }

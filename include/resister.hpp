@@ -10,11 +10,8 @@ namespace MFSCE
    {
    public:
       RESISTER();
-
-      void write( uint8_t ,  uint32_t ); // setter
-
+      void write(uint8_t, uint32_t);      // setter
       const uint32_t read(uint8_t) const; // getter
-
       void view() const;
 
    private:
