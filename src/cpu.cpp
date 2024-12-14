@@ -12,15 +12,21 @@
 
 namespace MFSCE
 {
+    void binaryLoader(const std::string, RAM &);
     CPU::CPU()
     {
     }
     void CPU::run()
     {
+
+        binaryLoader(text, ram);
+        binaryLoader(rodata, ram);
+        binaryLoader(data, ram);
+
         while (1)
         {
             decoder.setInstructionType(pc.read());
-            switch (instructionConverter(decoder.inst.funct7, decoder.inst.funct3, decoder.inst.opcode ))
+            switch (instructionConverter(decoder.inst.funct7, decoder.inst.funct3, decoder.inst.opcode))
             {
             case instructionSet::ADD:
             {
@@ -36,6 +42,7 @@ namespace MFSCE
             pc.write(pc.read() + 4);
         }
     }
+
     uint32_t CPU::signExtention(u_int32_t value)
     {
         return static_cast<uint32_t>(static_cast<int32_t>(value));
@@ -43,7 +50,6 @@ namespace MFSCE
 
     uint32_t CPU::zeroExtention(uint32_t)
     {
-
     }
     int CPU::instructionConverter(uint32_t opcode, uint32_t funct3, uint32_t funct7)
     {
