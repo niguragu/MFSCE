@@ -13,6 +13,7 @@
 namespace MFSCE
 {
     void binaryLoader(const std::string, RAM &);
+
     CPU::CPU()
     {
     }
@@ -25,16 +26,223 @@ namespace MFSCE
 
         while (1)
         {
-            decoder.setInstructionType(pc.read());
+            decoder.setInstructionType(ram.lb(pc.read()));
             switch (instructionConverter(decoder.inst.funct7, decoder.inst.funct3, decoder.inst.opcode))
             {
+            case instructionSet::LUI:
+            {
+            }
+            break;
+
+            case instructionSet::AUIPC:
+            {
+            }
+            break;
+
+            case instructionSet::JAL:
+            {
+            }
+            break;
+
+            case instructionSet::JALR:
+            {
+            }
+            break;
+
+            case instructionSet::BEQ:
+            {
+            }
+            break;
+
+            case instructionSet::BNE:
+            {
+            }
+            break;
+
+            case instructionSet::BLT:
+            {
+            }
+            break;
+
+            case instructionSet::BGE:
+            {
+            }
+            break;
+
+            case instructionSet::BLTU:
+            {
+            }
+            break;
+
+            case instructionSet::BGEU:
+            {
+            }
+            break;
+
+            case instructionSet::LB:
+            {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.add();
+                int8_t tmp_val = static_cast<int8_t>(ram.lb(alu.get()));
+                uint32_t result_data = static_cast<uint32_t>(tmp_val);
+                resister.write(decoder.inst.rd, result_data);
+            }
+            break;
+
+            case instructionSet::LH:
+            {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.add();
+                int16_t tmp_val = static_cast<int16_t>(ram.lh(alu.get()));
+                uint32_t result_data = static_cast<uint32_t>(tmp_val);
+                resister.write(decoder.inst.rd, result_data);
+            }
+            break;
+
+            case instructionSet::LW:
+            {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.add();
+                uint32_t result_data = ram.lb(alu.get());
+                resister.write(decoder.inst.rd, result_data);
+            }
+            break;
+
+            case instructionSet::LBU:
+            {
+                uint8_t tmp_val = static_cast<uint8_t>(ram.lb(alu.get()));
+                uint32_t result_data = static_cast<uint32_t>(tmp_val);
+                resister.write(decoder.inst.rd, result_data);
+            }
+            break;
+
+            case instructionSet::LHU:
+            {
+                uint16_t tmp_val = static_cast<uint16_t>(ram.lh(alu.get()));
+                uint32_t result_data = static_cast<uint32_t>(tmp_val);
+                resister.write(decoder.inst.rd, result_data);
+            }
+            break;
+
+            case instructionSet::SB:
+            {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.add();
+                
+            }
+            break;
+
+            case instructionSet::SH:
+            {
+            }
+            break;
+
+            case instructionSet::SW:
+            {
+            }
+            break;
+
+            case instructionSet::ADDI:
+            {
+            }
+            break;
+
+            case instructionSet::SLTI:
+            {
+            }
+            break;
+
+            case instructionSet::SLTIU:
+            {
+            }
+            break;
+
+            case instructionSet::XORI:
+            {
+            }
+            break;
+
+            case instructionSet::ORI:
+            {
+            }
+            break;
+
+            case instructionSet::ANDI:
+            {
+            }
+            break;
+
+            case instructionSet::SLLI:
+            {
+            }
+            break;
+
+            case instructionSet::SRLI:
+            {
+            }
+            break;
+
+            case instructionSet::SRAI:
+            {
+            }
+            break;
+
             case instructionSet::ADD:
             {
                 alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.add();
                 resister.write(decoder.inst.rd, alu.get());
             }
             break;
 
+            case instructionSet::SUB:
+            {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.sub();
+                resister.write(decoder.inst.rd, alu.get());
+            }
+            break;
+
+            case instructionSet::SLL:
+            {
+            }
+            break;
+
+            case instructionSet::SLT:
+            {
+            }
+            break;
+
+            case instructionSet::SLTU:
+            {
+            }
+            break;
+
+            case instructionSet::XOR:
+            {
+            }
+            break;
+
+            case instructionSet::SRL:
+            {
+            }
+            break;
+
+            case instructionSet::SRA:
+            {
+            }
+            break;
+
+            case instructionSet::OR:
+            {
+            }
+            break;
+
+            case instructionSet::AND:
+            {
+            }
+            break;
+                break;
             default:
                 break;
             }
@@ -43,9 +251,9 @@ namespace MFSCE
         }
     }
 
-    uint32_t CPU::signExtention(u_int32_t value)
+    uint32_t CPU::signExtention(u_int32_t value, uint8_t shiftCount)
     {
-        return static_cast<uint32_t>(static_cast<int32_t>(value));
+        return static_cast<uint32_t>(static_cast<int32_t>(value) >> shiftCount);
     }
 
     uint32_t CPU::zeroExtention(uint32_t)

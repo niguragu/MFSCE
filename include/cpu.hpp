@@ -1,5 +1,11 @@
 #pragma once
 
+#include "resister.hpp"
+#include "pc.hpp"
+#include "alu.hpp"
+#include "ram.hpp"
+#include "decoder.hpp"
+
 #include <iostream>
 #include <format>
 #include <cstdint>
@@ -18,9 +24,12 @@ namespace MFSCE
         ALU alu;
         RAM ram;
         DECODER decoder;
-        uint32_t signExtention(u_int32_t);
+        uint32_t signExtention(u_int32_t,uint8_t);
         uint32_t zeroExtention(u_int32_t);
-        int instructionConverter(uint32_t,uint32_t,uint32_t);
+        int instructionConverter(uint32_t, uint32_t, uint32_t);
+        const std::string text = "../testcode/test_text.bin";
+        const std::string rodata = "../testcode/test_rodata.bin";
+        const std::string data = "../testcode/test_data.bin";
         enum instructionSet
         {
             LUI = 0x37,

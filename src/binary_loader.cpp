@@ -39,7 +39,6 @@ namespace MFSCE
         }
         else if (filename == "data")
         {
-            std::size_t i = 0;
             std::ifstream file(filename, std::ios::binary | std::ios::ate);
             if (!file)
             {
