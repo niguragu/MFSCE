@@ -1,4 +1,4 @@
-#include "resister.hpp"
+#include "register.hpp"
 
 #include <iostream>
 #include <cstdint>
@@ -8,27 +8,27 @@
 namespace MFSCE
 {
 
-    RESISTER::RESISTER()
+    REGISTER::REGISTER()
     {
-        resisters_.fill(0);
+        registers_.fill(0);
     }
-    void RESISTER::write(uint8_t reg, uint32_t data)
+    void REGISTER::write(uint8_t reg, uint32_t data)
     {
         if (reg == 0)
         {
         }
         else if (reg < 32)
-            resisters_[reg] = data;
+            registers_[reg] = data;
     }
 
-    const uint32_t RESISTER::read(uint8_t reg) const
+    const uint32_t REGISTER::read(uint8_t reg) const
     {
-        return resisters_[reg];
+        return registers_[reg];
     }
 
-    void RESISTER::view() const
+    void REGISTER::view() const
     {
-        for (int i = 0; auto &&e : resisters_)
+        for (int i = 0; auto &&e : registers_)
         {
             std::cout << std::format("x{:02}:{:010}", i, e) << std::endl;
             ++i;

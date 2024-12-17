@@ -1,6 +1,6 @@
 #pragma once
 
-#include "resister.hpp"
+#include "register.hpp"
 #include "pc.hpp"
 #include "alu.hpp"
 #include "ram.hpp"
@@ -9,9 +9,14 @@
 #include <iostream>
 #include <format>
 #include <cstdint>
+#include <string>
 
 namespace MFSCE
 {
+    inline const std::string text = "../testcode/test_text.bin";
+    inline const std::string rodata = "../testcode/test_rodata.bin";
+    inline const std::string data = "../testcode/test_data.bin";
+
     class CPU
     {
     public:
@@ -19,17 +24,13 @@ namespace MFSCE
         void run();
 
     private:
-        RESISTER resister;
+        REGISTER reg;
         PC pc;
         ALU alu;
         RAM ram;
         DECODER decoder;
-        uint32_t signExtention(u_int32_t,uint8_t);
-        uint32_t zeroExtention(u_int32_t);
+        uint32_t signExtension(u_int32_t, uint8_t);
         int instructionConverter(uint32_t, uint32_t, uint32_t);
-        const std::string text = "../testcode/test_text.bin";
-        const std::string rodata = "../testcode/test_rodata.bin";
-        const std::string data = "../testcode/test_data.bin";
         enum instructionSet
         {
             LUI = 0x37,

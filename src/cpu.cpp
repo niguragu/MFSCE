@@ -1,4 +1,4 @@
-#include "resister.hpp"
+#include "register.hpp"
 #include "pc.hpp"
 #include "alu.hpp"
 #include "ram.hpp"
@@ -31,6 +31,7 @@ namespace MFSCE
             {
             case instructionSet::LUI:
             {
+                
             }
             break;
 
@@ -85,7 +86,7 @@ namespace MFSCE
                 alu.add();
                 int8_t tmp_val = static_cast<int8_t>(ram.lb(alu.get()));
                 uint32_t result_data = static_cast<uint32_t>(tmp_val);
-                resister.write(decoder.inst.rd, result_data);
+                reg.write(decoder.inst.rd, result_data);
             }
             break;
 
@@ -95,7 +96,7 @@ namespace MFSCE
                 alu.add();
                 int16_t tmp_val = static_cast<int16_t>(ram.lh(alu.get()));
                 uint32_t result_data = static_cast<uint32_t>(tmp_val);
-                resister.write(decoder.inst.rd, result_data);
+                reg.write(decoder.inst.rd, result_data);
             }
             break;
 
@@ -104,7 +105,7 @@ namespace MFSCE
                 alu.set(decoder.inst.rs1, decoder.inst.imm);
                 alu.add();
                 uint32_t result_data = ram.lb(alu.get());
-                resister.write(decoder.inst.rd, result_data);
+                reg.write(decoder.inst.rd, result_data);
             }
             break;
 
@@ -112,7 +113,7 @@ namespace MFSCE
             {
                 uint8_t tmp_val = static_cast<uint8_t>(ram.lb(alu.get()));
                 uint32_t result_data = static_cast<uint32_t>(tmp_val);
-                resister.write(decoder.inst.rd, result_data);
+                reg.write(decoder.inst.rd, result_data);
             }
             break;
 
@@ -120,7 +121,7 @@ namespace MFSCE
             {
                 uint16_t tmp_val = static_cast<uint16_t>(ram.lh(alu.get()));
                 uint32_t result_data = static_cast<uint32_t>(tmp_val);
-                resister.write(decoder.inst.rd, result_data);
+                reg.write(decoder.inst.rd, result_data);
             }
             break;
 
@@ -128,62 +129,95 @@ namespace MFSCE
             {
                 alu.set(decoder.inst.rs1, decoder.inst.imm);
                 alu.add();
-                
+                ram.sb(alu.get(), decoder.inst.rs2);
             }
             break;
 
             case instructionSet::SH:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.add();
+                ram.sh(alu.get(), decoder.inst.rs2);
             }
             break;
 
             case instructionSet::SW:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.add();
+                ram.sw(alu.get(), decoder.inst.rs2);
             }
             break;
 
             case instructionSet::ADDI:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.add();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::SLTI:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.slt();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::SLTIU:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.sltu();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::XORI:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.bitwiseXor();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::ORI:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.bitwiseOr();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::ANDI:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.bitwiseAnd();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::SLLI:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.sll();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::SRLI:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.srl();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::SRAI:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.sra();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
@@ -191,7 +225,7 @@ namespace MFSCE
             {
                 alu.set(decoder.inst.rs1, decoder.inst.rs2);
                 alu.add();
-                resister.write(decoder.inst.rd, alu.get());
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
@@ -199,66 +233,86 @@ namespace MFSCE
             {
                 alu.set(decoder.inst.rs1, decoder.inst.rs2);
                 alu.sub();
-                resister.write(decoder.inst.rd, alu.get());
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::SLL:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.sll();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::SLT:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.slt();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::SLTU:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.sltu();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::XOR:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.bitwiseXor();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::SRL:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.srl();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::SRA:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.sra();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::OR:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.bitwiseOr();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
 
             case instructionSet::AND:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.bitwiseAnd();
+                reg.write(decoder.inst.rd, alu.get());
             }
             break;
-                break;
             default:
-                break;
+            break;
             }
-            resister.view();
+            reg.view();
             pc.write(pc.read() + 4);
         }
     }
 
-    uint32_t CPU::signExtention(u_int32_t value, uint8_t shiftCount)
+    uint32_t CPU::signExtension(u_int32_t value, uint8_t shiftCount)
     {
         return static_cast<uint32_t>(static_cast<int32_t>(value) >> shiftCount);
     }
 
-    uint32_t CPU::zeroExtention(uint32_t)
-    {
-    }
     int CPU::instructionConverter(uint32_t opcode, uint32_t funct3, uint32_t funct7)
     {
         std::string funct3Str = (funct3 == 0) ? "000" : std::to_string(funct3);
