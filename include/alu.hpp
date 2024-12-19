@@ -15,7 +15,6 @@ namespace MFSCE
 
         const uint32_t get() const; // getter
 
-        // arithmetic instruction
         void add();
         void sub();
         void bitwiseAnd();
@@ -26,6 +25,10 @@ namespace MFSCE
         void srl();
         void slt();
         void sltu();
+        void beq();
+        void bne();
+        void bge();
+        void bgeu();
 
         void view() const;
 

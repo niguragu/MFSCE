@@ -9,6 +9,7 @@ namespace MFSCE
     DECODER::DECODER() : inst{}
     {
     }
+    
     void DECODER::setInstructionType(uint32_t instruction)
     {
         inst.opcode = instruction & 0x7f; // 7-bit mask for opcode

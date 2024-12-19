@@ -19,6 +19,7 @@ namespace MFSCE
         uint32_t funct7 : 7;
         uint32_t imm : 32;
     };
+    
     class DECODER
     {
     public:

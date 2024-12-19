@@ -12,7 +12,6 @@
 
 namespace MFSCE
 {
-    void binaryLoader(const std::string, RAM &);
 
     CPU::CPU()
     {
@@ -31,22 +30,33 @@ namespace MFSCE
             {
             case instructionSet::LUI:
             {
-                
+
+                reg.write(decoder.inst.rd,decoder.inst.imm << 20);
             }
             break;
 
             case instructionSet::AUIPC:
             {
+                int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
+                int32_t casted_pc = static_cast<int32_t>(pc.read());
+                uint32_t offset = (static_cast<uint32_t>((casted_imm << 12) + casted_pc));
+                reg.write(decoder.inst.rd,offset);
             }
             break;
 
             case instructionSet::JAL:
             {
+                reg.write(decoder.inst.rd,pc.read() + 4);
+                int32_t shifted_imm = static_cast<int32_t>(decoder.inst.imm) << 1;
+                pc.write((static_cast<uint32_t>((static_cast<int32_t>(pc.read())) + shifted_imm)));
             }
             break;
 
             case instructionSet::JALR:
             {
+                reg.write(decoder.inst.rd,pc.read() + 4);
+                int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
+                pc.write((static_cast<uint32_t>((static_cast<int32_t>(decoder.inst.rs1)) + casted_imm)));
             }
             break;
 
@@ -300,10 +310,11 @@ namespace MFSCE
                 reg.write(decoder.inst.rd, alu.get());
             }
             break;
+
             default:
             break;
             }
-            reg.view();
+            ram.view();
             pc.write(pc.read() + 4);
         }
     }

@@ -89,6 +89,54 @@ namespace MFSCE
         }
     }
 
+    void ALU::beq()
+    {
+        if (static_cast<int32_t>(operand1_) == static_cast<int32_t>(operand2_))
+        {
+            result_ = 1;
+        }
+        else
+        {
+            result_ = 0;
+        }
+    }
+
+    void ALU::bne()
+    {
+        if (static_cast<int32_t>(operand1_) != static_cast<int32_t>(operand2_))
+        {
+            result_ = 1;
+        }
+        else
+        {
+            result_ = 0;
+        }
+    }
+
+    void ALU::bge()
+    {
+        if (static_cast<int32_t>(operand1_) > static_cast<int32_t>(operand2_))
+        {
+            result_ = 1;
+        }
+        else
+        {
+            result_ = 0;
+        }
+    }
+
+    void ALU::bgeu()
+    {
+        if (operand1_ > operand2_)
+        {
+            result_ = 1;
+        }
+        else
+        {
+            result_ = 0;
+        }
+    }
+
     void ALU::view() const
     {
         std::cout << std::format("operand1:{:032b} operand2:{:032b} result_:{:032b}", operand1_, operand2_, result_) << std::endl;
