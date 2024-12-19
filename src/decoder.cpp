@@ -81,7 +81,7 @@ namespace MFSCE
             inst.imm = (((instruction >> 31) & 0x1) << 20) |
                         (((instruction >> 12) & 0xFF) << 12) |
                         (((instruction >> 20) & 0x1) << 11) |
-                        (((instruction >> 21) & 0x3FF) << 1);
+                        (((instruction >> 21) & 0x3FF));
             inst.imm = signExtension(inst.imm << 11 >> 11);
             break;
         }

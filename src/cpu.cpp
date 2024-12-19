@@ -31,7 +31,7 @@ namespace MFSCE
             case instructionSet::LUI:
             {
 
-                reg.write(decoder.inst.rd,decoder.inst.imm << 20);
+                reg.write(decoder.inst.rd, decoder.inst.imm << 20);
             }
             break;
 
@@ -39,14 +39,14 @@ namespace MFSCE
             {
                 int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
                 int32_t casted_pc = static_cast<int32_t>(pc.read());
-                uint32_t offset = (static_cast<uint32_t>((casted_imm << 12) + casted_pc));
-                reg.write(decoder.inst.rd,offset);
+                uint32_t target_addr = (static_cast<uint32_t>((casted_imm << 12) + casted_pc));
+                reg.write(decoder.inst.rd, target_addr);
             }
             break;
 
             case instructionSet::JAL:
             {
-                reg.write(decoder.inst.rd,pc.read() + 4);
+                reg.write(decoder.inst.rd, pc.read() + 4);
                 int32_t shifted_imm = static_cast<int32_t>(decoder.inst.imm) << 1;
                 pc.write((static_cast<uint32_t>((static_cast<int32_t>(pc.read())) + shifted_imm)));
             }
@@ -54,7 +54,7 @@ namespace MFSCE
 
             case instructionSet::JALR:
             {
-                reg.write(decoder.inst.rd,pc.read() + 4);
+                reg.write(decoder.inst.rd, pc.read() + 4);
                 int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
                 pc.write((static_cast<uint32_t>((static_cast<int32_t>(decoder.inst.rs1)) + casted_imm)));
             }
@@ -62,31 +62,85 @@ namespace MFSCE
 
             case instructionSet::BEQ:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.beq();
+                if (alu.get())
+                {
+                    int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
+                    int32_t casted_pc = static_cast<int32_t>(pc.read());
+                    uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
+                    pc.write(target_addr);
+                }
             }
             break;
 
             case instructionSet::BNE:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.bne();
+                if (alu.get())
+                {
+                    int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
+                    int32_t casted_pc = static_cast<int32_t>(pc.read());
+                    uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
+                    pc.write(target_addr);
+                }
             }
             break;
 
             case instructionSet::BLT:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.slt(); // Use the same method because the processing is identical to SLT
+                if (alu.get())
+                {
+                    int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
+                    int32_t casted_pc = static_cast<int32_t>(pc.read());
+                    uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
+                    pc.write(target_addr);
+                }
             }
             break;
 
             case instructionSet::BGE:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.bge();
+                if (alu.get())
+                {
+                    int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
+                    int32_t casted_pc = static_cast<int32_t>(pc.read());
+                    uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
+                    pc.write(target_addr);
+                }
             }
             break;
 
             case instructionSet::BLTU:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.sltu(); // Use the same method because the processing is identical to SLTU
+                if (alu.get())
+                {
+                    int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
+                    int32_t casted_pc = static_cast<int32_t>(pc.read());
+                    uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
+                    pc.write(target_addr);
+                }
             }
             break;
 
             case instructionSet::BGEU:
             {
+                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.bgeu();
+                if (alu.get())
+                {
+                    int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
+                    int32_t casted_pc = static_cast<int32_t>(pc.read());
+                    uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
+                    pc.write(target_addr);
+                }
             }
             break;
 
@@ -312,7 +366,7 @@ namespace MFSCE
             break;
 
             default:
-            break;
+                break;
             }
             ram.view();
             pc.write(pc.read() + 4);
