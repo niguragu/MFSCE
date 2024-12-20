@@ -25,6 +25,8 @@ namespace MFSCE
 
         while (1)
         {
+            ram.view();
+            
             decoder.setInstructionType(ram.lb(pc.read()));
             switch (instructionConverter(decoder.inst.funct7, decoder.inst.funct3, decoder.inst.opcode))
             {
@@ -368,7 +370,6 @@ namespace MFSCE
             default:
                 break;
             }
-            ram.view();
             pc.write(pc.read() + 4);
         }
     }
