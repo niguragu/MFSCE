@@ -13,10 +13,6 @@
 
 namespace MFSCE
 {
-    inline const std::string text = "../testcode/test_text.bin";
-    inline const std::string rodata = "../testcode/test_rodata.bin";
-    inline const std::string data = "../testcode/test_data.bin";
-
     void binaryLoader(const std::string, RAM &);
 
     class CPU

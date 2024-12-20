@@ -29,11 +29,11 @@ namespace MFSCE
 
     void RAM::sb(uint32_t address, uint32_t data)
     {
-        if (address < main_memory_)
+        if (address < memory_map.MMIO_origin || address > memory_map.MMIO_origin + memory_map.MMIO_length_)
         {
             mem_[address] = data & 0xff;
         }
-        else if (address < IO_device_)
+        else if (memory_map.MMIO_origin <= address &&  address <= memory_map.MMIO_origin + memory_map. MMIO_length_)
         {
             std::cout << (data & 0xff) << std::endl;
         }

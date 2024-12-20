@@ -1,4 +1,4 @@
-
+int global_var = 42;
 int main()
 {
     int a = 1;

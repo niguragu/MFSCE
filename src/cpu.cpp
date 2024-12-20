@@ -19,9 +19,9 @@ namespace MFSCE
     void CPU::run()
     {
 
-        binaryLoader(text, ram);
-        binaryLoader(rodata, ram);
-        binaryLoader(data, ram);
+        binaryLoader("text", ram);
+        binaryLoader("rodata", ram);
+        binaryLoader("data", ram);
 
         while (1)
         {
