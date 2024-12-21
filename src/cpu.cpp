@@ -16,15 +16,13 @@ namespace MFSCE
     CPU::CPU()
     {
     }
+
     void CPU::run()
     {
+        binaryLoader("ROM",ram);
+        binaryLoader("RAM",ram);
 
-        binaryLoader("text", ram);
-        binaryLoader("rodata", ram);
-        binaryLoader("data", ram);
 
-        while (1)
-        {
             ram.view();
             
             decoder.setInstructionType(ram.lb(pc.read()));
@@ -372,7 +370,7 @@ namespace MFSCE
             }
             pc.write(pc.read() + 4);
         }
-    }
+
 
     uint32_t CPU::signExtension(u_int32_t value, uint8_t shiftCount)
     {

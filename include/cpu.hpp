@@ -13,7 +13,7 @@
 
 namespace MFSCE
 {
-    void binaryLoader(const std::string, RAM &);
+    void binaryLoader(std::string ,RAM &);
 
     class CPU
     {
