@@ -28,7 +28,7 @@ namespace MFSCE
         RAM ram;
         DECODER decoder;
         uint32_t signExtension(u_int32_t, uint8_t);
-        int instructionConverter(uint32_t, uint32_t, uint32_t);
+        uint32_t instructionConverter(uint32_t, uint32_t, uint32_t);
         enum instructionSet
         {
             LUI = 0x37,

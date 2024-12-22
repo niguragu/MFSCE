@@ -4,12 +4,13 @@
 #include <vector>
 #include <iostream>
 #include <cstdint>
+#include <cstdlib>
 
 namespace MFSCE
 {
-    inline const std::string text_filepath = "../testcode/test_text.bin";
-    inline const std::string rodata_filepath = "../testcode/test_rodata.bin";
-    inline const std::string data_filepath = "../testcode/test_data.bin";
+    inline const std::string text_filepath = "/home/localuser/projects/MFSCE/testcode/test_text.bin";
+    inline const std::string rodata_filepath = "/home/localuser/projects/MFSCE/testcode/test_rodata.bin";
+    inline const std::string data_filepath = "/home/localuser/projects/MFSCE/testcode/test_data.bin";
 
     void binaryLoader(std::string memory_area, RAM &ram)
     {
@@ -25,7 +26,7 @@ namespace MFSCE
                 if (!file)
                 {
                     std::cerr << "Cannot open file: " << text_filepath << std::endl;
-                    return;
+                    std::exit(EXIT_FAILURE);
                 }
 
                 std::streamsize fileSize = file.tellg();
@@ -35,7 +36,7 @@ namespace MFSCE
                 if (!file.read(buffer.data(), fileSize))
                 {
                     std::cerr << "Failed to load file: " << text_filepath << std::endl;
-                    return;
+                    std::exit(EXIT_FAILURE);
                 }
 
                 for (; i < buffer.size(); ++i)
@@ -51,7 +52,7 @@ namespace MFSCE
                 if (!file)
                 {
                     std::cerr << "Cannot open file: " << rodata_filepath << std::endl;
-                    return;
+                    std::exit(EXIT_FAILURE);
                 }
 
                 std::streamsize fileSize = file.tellg();
@@ -61,7 +62,7 @@ namespace MFSCE
                 if (!file.read(buffer.data(), fileSize))
                 {
                     std::cerr << "Failed to load file: " << rodata_filepath << std::endl;
-                    return;
+                    std::exit(EXIT_FAILURE);
                 }
 
                 for (std::size_t j = 0; j < buffer.size(); ++j, ++i)
@@ -79,7 +80,7 @@ namespace MFSCE
             if (!file)
             {
                 std::cerr << "Cannot open file: " << data_filepath << std::endl;
-                return;
+                std::exit(EXIT_FAILURE);
             }
 
             std::streamsize fileSize = file.tellg();
@@ -89,7 +90,7 @@ namespace MFSCE
             if (!file.read(buffer.data(), fileSize))
             {
                 std::cerr << "Failed to load file: " << data_filepath << std::endl;
-                return;
+                std::exit(EXIT_FAILURE);
             }
 
             for (std::size_t i = 0; i < buffer.size(); ++i)
