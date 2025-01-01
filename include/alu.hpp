@@ -33,9 +33,9 @@ namespace MFSCE
         void view() const;
 
     private:
-        uint32_t operand1_;
-        uint32_t operand2_;
-        uint32_t result_;
+        int32_t operand1_;
+        int32_t operand2_;
+        int32_t result_;
     };
 
 } // MFSCE

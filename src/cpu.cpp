@@ -25,13 +25,11 @@ namespace MFSCE
         while (1)
         {
             pc.view();
-            reg.view();
 
-            uint32_t current_pc = pc.read();
-            uint32_t instruction = ram.lw(current_pc);
+            uint32_t instruction = ram.lw(pc.read());
 
-            std::cout << "Raw Instruction at PC 0x" << std::hex << current_pc
-                      << ": 0x" << instruction << std::dec << std::endl;
+            std::cout << "Raw Instruction at PC 0x" << std::hex << pc.read()
+                     << ": 0x" << instruction << std::dec << std::endl;
 
             decoder.setInstructionType(ram.lw(pc.read()));
 
@@ -69,13 +67,13 @@ namespace MFSCE
             {
                 reg.write(decoder.inst.rd, pc.read() + 4);
                 int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
-                pc.write((static_cast<uint32_t>((static_cast<int32_t>(decoder.inst.rs1)) + casted_imm)));
+                pc.write((static_cast<uint32_t>((static_cast<int32_t>(reg.read(decoder.inst.rs1))) + casted_imm)));
             }
             break;
 
             case instructionSet::BEQ:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.beq();
                 if (alu.get())
                 {
@@ -90,7 +88,7 @@ namespace MFSCE
 
             case instructionSet::BNE:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.bne();
                 if (alu.get())
                 {
@@ -105,7 +103,7 @@ namespace MFSCE
 
             case instructionSet::BLT:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.slt(); // Use the same method because the processing is identical to SLT
                 if (alu.get())
                 {
@@ -120,7 +118,7 @@ namespace MFSCE
 
             case instructionSet::BGE:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.bge();
                 if (alu.get())
                 {
@@ -135,7 +133,7 @@ namespace MFSCE
 
             case instructionSet::BLTU:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.sltu(); // Use the same method because the processing is identical to SLTU
                 if (alu.get())
                 {
@@ -150,7 +148,7 @@ namespace MFSCE
 
             case instructionSet::BGEU:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.bgeu();
                 if (alu.get())
                 {
@@ -165,7 +163,7 @@ namespace MFSCE
 
             case instructionSet::LB:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.add();
                 int8_t tmp_val = static_cast<int8_t>(ram.lb(alu.get()));
                 uint32_t result_data = static_cast<uint32_t>(tmp_val);
@@ -176,7 +174,7 @@ namespace MFSCE
 
             case instructionSet::LH:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.add();
                 int16_t tmp_val = static_cast<int16_t>(ram.lh(alu.get()));
                 uint32_t result_data = static_cast<uint32_t>(tmp_val);
@@ -187,7 +185,7 @@ namespace MFSCE
 
             case instructionSet::LW:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.add();
                 uint32_t result_data = ram.lb(alu.get());
                 reg.write(decoder.inst.rd, result_data);
@@ -215,34 +213,34 @@ namespace MFSCE
 
             case instructionSet::SB:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.add();
-                ram.sb(alu.get(), decoder.inst.rs2);
+                ram.sb(alu.get(), reg.read(decoder.inst.rs2));
                 pc.write(pc.read() + 4);
             }
             break;
 
             case instructionSet::SH:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.add();
-                ram.sh(alu.get(), decoder.inst.rs2);
+                ram.sh(alu.get(), reg.read(decoder.inst.rs2));
                 pc.write(pc.read() + 4);
             }
             break;
 
             case instructionSet::SW:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.add();
-                ram.sw(alu.get(), decoder.inst.rs2);
+                ram.sw(alu.get(), reg.read(decoder.inst.rs2));
                 pc.write(pc.read() + 4);
             }
             break;
 
             case instructionSet::ADDI:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.add();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -251,7 +249,7 @@ namespace MFSCE
 
             case instructionSet::SLTI:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.slt();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -260,7 +258,7 @@ namespace MFSCE
 
             case instructionSet::SLTIU:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.sltu();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -269,7 +267,7 @@ namespace MFSCE
 
             case instructionSet::XORI:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.bitwiseXor();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -278,7 +276,7 @@ namespace MFSCE
 
             case instructionSet::ORI:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.bitwiseOr();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -287,7 +285,7 @@ namespace MFSCE
 
             case instructionSet::ANDI:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.bitwiseAnd();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -296,7 +294,7 @@ namespace MFSCE
 
             case instructionSet::SLLI:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.sll();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -305,7 +303,7 @@ namespace MFSCE
 
             case instructionSet::SRLI:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.srl();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -314,7 +312,7 @@ namespace MFSCE
 
             case instructionSet::SRAI:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.imm);
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.sra();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -323,7 +321,7 @@ namespace MFSCE
 
             case instructionSet::ADD:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.add();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -332,7 +330,7 @@ namespace MFSCE
 
             case instructionSet::SUB:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.sub();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -341,7 +339,7 @@ namespace MFSCE
 
             case instructionSet::SLL:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.sll();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -350,7 +348,7 @@ namespace MFSCE
 
             case instructionSet::SLT:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.slt();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -359,7 +357,7 @@ namespace MFSCE
 
             case instructionSet::SLTU:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.sltu();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -368,7 +366,7 @@ namespace MFSCE
 
             case instructionSet::XOR:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.bitwiseXor();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -377,7 +375,7 @@ namespace MFSCE
 
             case instructionSet::SRL:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.srl();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -386,7 +384,7 @@ namespace MFSCE
 
             case instructionSet::SRA:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.sra();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -395,7 +393,7 @@ namespace MFSCE
 
             case instructionSet::OR:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.bitwiseOr();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -404,7 +402,7 @@ namespace MFSCE
 
             case instructionSet::AND:
             {
-                alu.set(decoder.inst.rs1, decoder.inst.rs2);
+                alu.set(reg.read(decoder.inst.rs1), reg.read(decoder.inst.rs2));
                 alu.bitwiseAnd();
                 reg.write(decoder.inst.rd, alu.get());
                 pc.write(pc.read() + 4);
@@ -412,8 +410,10 @@ namespace MFSCE
             break;
 
             default:
+                pc.write(pc.read() + 4);
                 break;
             }
+            reg.view();
         }
     }
 
