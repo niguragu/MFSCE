@@ -34,7 +34,7 @@ namespace MFSCE
         {
             mem_[address] = data & 0xff;
         }
-        else if (memory_map.MMIO_origin_ <= address &&  address <= memory_map.MMIO_origin_ + memory_map. MMIO_length_)
+        else
         {
             std::cout << (data & 0xff) << std::endl;
         }

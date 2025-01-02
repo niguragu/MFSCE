@@ -411,9 +411,10 @@ namespace MFSCE
 
             default:
                 pc.write(pc.read() + 4);
+                std::cerr << "Undefined order" << std::endl;
                 break;
             }
-            reg.view();
+            //reg.view();
         }
     }
 
