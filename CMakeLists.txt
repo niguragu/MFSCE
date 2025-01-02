@@ -1,14 +1,28 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.16)
 
-set(CMAKE_CXX_COMPILER "/usr/bin/g++" CACHE STRING "C++ compiler" FORCE)
-
-project(MFSCE CXX)
+project(MFSCE LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-include_directories(include)
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
+endif()
 
-add_executable(main src/main.cpp src/register.cpp src/pc.cpp src/alu.cpp src/ram.cpp src/decoder.cpp src/cpu.cpp src/binary_loader.cpp)
+add_executable(main 
+    src/main.cpp 
+    src/register.cpp 
+    src/pc.cpp 
+    src/alu.cpp 
+    src/ram.cpp 
+    src/decoder.cpp 
+    src/cpu.cpp 
+    src/binary_loader.cpp
+)
 
-target_compile_options(main PUBLIC -O2 -Wall)
+target_include_directories(main PRIVATE include)
 
+target_compile_options(main PRIVATE 
+    $<$<CONFIG:Debug>:-g -O0>
+    $<$<CONFIG:Release>:-O2 -Wall>
+)

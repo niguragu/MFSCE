@@ -6,6 +6,16 @@
 
 namespace MFSCE
 {
+    struct MemoryMap
+    {
+        unsigned int ROM_origin_ = 0x00000000;
+        unsigned int ROM_length_ = 0x40000;
+        unsigned int RAM_origin_ = 0x20000000;
+        unsigned int RAM_length_ = 0x10000;
+        unsigned int MMIO_origin_ = 0x40000000;
+        unsigned int MMIO_length_ = 0x1000;
+    };
+
     class RAM
     {
     public:
@@ -23,10 +33,10 @@ namespace MFSCE
 
         void view() const;
 
+        MemoryMap memory_map;
+
     private:
         std::map<uint32_t, uint8_t> mem_;
-        uint32_t main_memory_ = 0x0FFFFFFF;
-        uint32_t IO_device_ = 0x10000FFF;
         bool alignmentCheck(uint32_t, uint8_t);
-        };
+    };
 } //  MFSCE

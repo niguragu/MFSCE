@@ -13,13 +13,13 @@ namespace MFSCE
     }
     void ALU::set(uint32_t operand1, uint32_t operand2)
     {
-        operand1_ = operand1;
-        operand2_ = operand2;
+        operand1_ = static_cast<int32_t>(operand1);
+        operand2_ = static_cast<int32_t>(operand2);
     }
 
     const uint32_t ALU::get() const
     {
-        return result_;
+        return static_cast<uint32_t>(result_);
     }
 
     void ALU::add()

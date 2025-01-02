@@ -42,7 +42,7 @@ namespace MFSCE
             inst.funct3 = (instruction >> 12) & 0x07;
             inst.rs1 = (instruction >> 15) & 0x1F;
             inst.rs2 = (instruction >> 20) & 0x1F;
-            inst.funct7 = (instruction >> 25) & 0x7F;
+            inst.funct7 = 0;
             inst.imm = ((instruction >> 25) << 5) | ((instruction >> 7) & 0x1F);
             inst.imm = signExtension(inst.imm << 20 >> 20);
             break;

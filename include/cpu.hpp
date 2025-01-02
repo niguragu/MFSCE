@@ -13,11 +13,7 @@
 
 namespace MFSCE
 {
-    inline const std::string text = "../testcode/test_text.bin";
-    inline const std::string rodata = "../testcode/test_rodata.bin";
-    inline const std::string data = "../testcode/test_data.bin";
-
-    void binaryLoader(const std::string, RAM &);
+    void binaryLoader(std::string ,RAM &);
 
     class CPU
     {
@@ -32,7 +28,7 @@ namespace MFSCE
         RAM ram;
         DECODER decoder;
         uint32_t signExtension(u_int32_t, uint8_t);
-        int instructionConverter(uint32_t, uint32_t, uint32_t);
+        uint32_t instructionConverter(uint32_t, uint32_t, uint32_t);
         enum instructionSet
         {
             LUI = 0x37,
