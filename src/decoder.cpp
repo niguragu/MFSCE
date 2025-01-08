@@ -9,13 +9,45 @@ namespace MFSCE
     DECODER::DECODER() : inst{}
     {
     }
-    
+
     void DECODER::setInstructionType(uint32_t instruction)
     {
         inst.opcode = instruction & 0x7f; // 7-bit mask for opcode
-        switch (inst.opcode)
+
+        char opcode_type = '0';
+
+        if (inst.opcode = (0b0110111 || 0b0010111))
         {
-        case 0b0110011: // R-type
+            opcode_type = 'U';
+        }
+        else if (inst.opcode = 0b1101111)
+        {
+            opcode_type = 'J';
+        }
+
+        else if (inst.opcode = (0b0000011 || 0b1100111 || 0b0010011))
+        {
+            opcode_type = 'I';
+        }
+
+        else if (inst.opcode = 0b1100011)
+        {
+            opcode_type = 'B';
+        }
+
+        else if (inst.opcode = 0b0100011)
+        {
+            opcode_type = 'S';
+        }
+
+        else if (inst.opcode = 0b0110011)
+        {
+            opcode_type = 'R';
+        }
+
+        switch (opcode_type)
+        {
+        case 'R':
         {
             inst.rd = (instruction >> 7) & 0x1F;
             inst.funct3 = (instruction >> 12) & 0x07;
@@ -25,7 +57,7 @@ namespace MFSCE
             inst.imm = 0;
             break;
         }
-        case 0b0010011: // I-type
+        case 'I':
         {
             inst.rd = (instruction >> 7) & 0x1F;
             inst.funct3 = (instruction >> 12) & 0x07;
@@ -36,7 +68,7 @@ namespace MFSCE
             inst.imm = signExtension(inst.imm << 20 >> 20);
             break;
         }
-        case 0b0100011: // S-type
+        case 'S':
         {
             inst.rd = 0;
             inst.funct3 = (instruction >> 12) & 0x07;
@@ -47,7 +79,7 @@ namespace MFSCE
             inst.imm = signExtension(inst.imm << 20 >> 20);
             break;
         }
-        case 0b1100011: // B-type
+        case 'B':
         {
             inst.rd = 0;
             inst.funct3 = (instruction >> 12) & 0x07;
@@ -55,13 +87,13 @@ namespace MFSCE
             inst.rs2 = (instruction >> 20) & 0x1F;
             inst.funct7 = 0;
             inst.imm = (((instruction >> 31) & 0x1) << 12) |
-                        (((instruction >> 7) & 0x1) << 11) |
-                        (((instruction >> 25) & 0x3F) << 5) |
-                        (((instruction >> 8) & 0xF) << 1);
+                       (((instruction >> 7) & 0x1) << 11) |
+                       (((instruction >> 25) & 0x3F) << 5) |
+                       (((instruction >> 8) & 0xF) << 1);
             inst.imm = signExtension(inst.imm << 19 >> 19);
             break;
         }
-        case 0b0110111: // U-type
+        case 'U':
         {
             inst.rd = (instruction >> 7) & 0x1F;
             inst.funct3 = 0;
@@ -71,7 +103,7 @@ namespace MFSCE
             inst.imm = (instruction >> 12) & 0xFFFFF;
             break;
         }
-        case 0b1101111: // J-type
+        case 'J':
         {
             inst.rd = (instruction >> 7) & 0x1F;
             inst.funct3 = 0;
@@ -79,15 +111,15 @@ namespace MFSCE
             inst.rs2 = 0;
             inst.funct7 = 0;
             inst.imm = (((instruction >> 31) & 0x1) << 20) |
-                        (((instruction >> 12) & 0xFF) << 12) |
-                        (((instruction >> 20) & 0x1) << 11) |
-                        (((instruction >> 21) & 0x3FF));
+                       (((instruction >> 12) & 0xFF) << 12) |
+                       (((instruction >> 20) & 0x1) << 11) |
+                       (((instruction >> 21) & 0x3FF));
             inst.imm = signExtension(inst.imm << 11 >> 11);
             break;
         }
         default:
-        std::cerr << "Undefined Instruction" << std::endl;
-        break;
+            std::cerr << "Undefined Instruction" << std::endl;
+            break;
         }
     }
     Instruction DECODER::get() const
