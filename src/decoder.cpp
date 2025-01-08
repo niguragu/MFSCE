@@ -16,31 +16,31 @@ namespace MFSCE
 
         char opcode_type = '0';
 
-        if (inst.opcode = (0b0110111 || 0b0010111))
+        if (inst.opcode == 0b0110111 || inst.opcode == 0b0010111)
         {
             opcode_type = 'U';
         }
-        else if (inst.opcode = 0b1101111)
+        else if (inst.opcode == 0b1101111)
         {
             opcode_type = 'J';
         }
 
-        else if (inst.opcode = (0b0000011 || 0b1100111 || 0b0010011))
+        else if (inst.opcode == 0b0000011 || inst.opcode == 0b1100111 || inst.opcode == 0b0010011)
         {
             opcode_type = 'I';
         }
 
-        else if (inst.opcode = 0b1100011)
+        else if (inst.opcode == 0b1100011)
         {
             opcode_type = 'B';
         }
 
-        else if (inst.opcode = 0b0100011)
+        else if (inst.opcode == 0b0100011)
         {
             opcode_type = 'S';
         }
 
-        else if (inst.opcode = 0b0110011)
+        else if (inst.opcode == 0b0110011)
         {
             opcode_type = 'R';
         }
