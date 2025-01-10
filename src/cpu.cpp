@@ -24,23 +24,23 @@ namespace MFSCE
 
         while (1)
         {
-            //    pc.view();
+            // pc.view();
 
-            uint32_t instruction = ram.lw(pc.read());
+            //uint32_t instruction = ram.lw(pc.read());
 
-            //    std::cout << "Raw Instruction at PC 0x" << std::hex << pc.read()
-            //             << ": 0x" << instruction << std::dec << std::endl;
+            //std::cout << "Raw Instruction at PC 0x" << std::hex << pc.read()
+            //          << ": 0x" << instruction << std::dec << std::endl;
 
             decoder.setInstructionType(ram.lw(pc.read()));
 
-            //    decoder.view();
+            //decoder.view();
 
             switch (instructionConverter(decoder.inst.opcode, decoder.inst.funct3, decoder.inst.funct7))
             {
             case instructionSet::LUI:
             {
 
-                reg.write(decoder.inst.rd, decoder.inst.imm << 20);
+                reg.write(decoder.inst.rd, decoder.inst.imm);
                 pc.write(pc.read() + 4);
             }
             break;
@@ -49,7 +49,7 @@ namespace MFSCE
             {
                 int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
                 int32_t casted_pc = static_cast<int32_t>(pc.read());
-                uint32_t target_addr = (static_cast<uint32_t>((casted_imm << 12) + casted_pc));
+                uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
                 reg.write(decoder.inst.rd, target_addr);
                 pc.write(pc.read() + 4);
             }

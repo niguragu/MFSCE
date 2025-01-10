@@ -30,7 +30,7 @@ namespace MFSCE
         Instruction inst;
 
     private:
-        uint32_t signExtension(uint32_t);
+        uint32_t signExtension(int);
     };
 
 } // MFSCE

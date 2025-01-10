@@ -23,10 +23,10 @@ DATA_BIN = test_data.bin
 all: $(TEXT_BIN) $(RODATA_BIN) $(DATA_BIN)
 
 $(START_O): $(START_S)
-	$(CC) $(ASFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(TEST_O): $(TEST_C)
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(ELF): $(OBJS) $(LINK_SCRIPT)
 	$(LD) $(OBJS) -T $(LINK_SCRIPT) -static -o $@

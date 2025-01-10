@@ -65,7 +65,7 @@ namespace MFSCE
             inst.rs2 = 0;
             inst.funct7 = 0;
             inst.imm = (instruction >> 20) & 0xFFF;
-            inst.imm = signExtension(inst.imm << 20 >> 20);
+            inst.imm = signExtension(12);
             break;
         }
         case 'S':
@@ -75,8 +75,8 @@ namespace MFSCE
             inst.rs1 = (instruction >> 15) & 0x1F;
             inst.rs2 = (instruction >> 20) & 0x1F;
             inst.funct7 = 0;
-            inst.imm = ((instruction >> 25) << 5) | ((instruction >> 7) & 0x1F);
-            inst.imm = signExtension(inst.imm << 20 >> 20);
+            inst.imm = ((instruction >> 25) & 0x7F) << 5 | ((instruction >> 7) & 0x1F);
+            inst.imm = signExtension(12);
             break;
         }
         case 'B':
@@ -90,7 +90,7 @@ namespace MFSCE
                        (((instruction >> 7) & 0x1) << 11) |
                        (((instruction >> 25) & 0x3F) << 5) |
                        (((instruction >> 8) & 0xF) << 1);
-            inst.imm = signExtension(inst.imm << 19 >> 19);
+            inst.imm = signExtension(12);
             break;
         }
         case 'U':
@@ -100,7 +100,7 @@ namespace MFSCE
             inst.rs1 = 0;
             inst.rs2 = 0;
             inst.funct7 = 0;
-            inst.imm = (instruction >> 12) & 0xFFFFF;
+            inst.imm = instruction & 0xFFFFF000;
             break;
         }
         case 'J':
@@ -114,7 +114,7 @@ namespace MFSCE
                        (((instruction >> 12) & 0xFF) << 12) |
                        (((instruction >> 20) & 0x1) << 11) |
                        (((instruction >> 21) & 0x3FF));
-            inst.imm = signExtension(inst.imm << 11 >> 11);
+            inst.imm = signExtension(20);
             break;
         }
         default:
@@ -128,16 +128,19 @@ namespace MFSCE
     }
     void DECODER::view() const
     {
-        std::cout << std::format("opcode: {:b}", inst.opcode) << std::endl;
-        std::cout << std::format("rd: {:b}", inst.rd) << std::endl;
-        std::cout << std::format("funct3: {:b}", inst.funct3) << std::endl;
-        std::cout << std::format("rs1: {:b}", inst.rs1) << std::endl;
-        std::cout << std::format("rs2: {:b}", inst.rs2) << std::endl;
-        std::cout << std::format("funct7: {:b}", inst.funct7) << std::endl;
+        std::cout << std::format("opcode: {:07b}", inst.opcode) << std::endl;
+        std::cout << std::format("rd: {:05b}", inst.rd) << std::endl;
+        std::cout << std::format("funct3: {:03b}", inst.funct3) << std::endl;
+        std::cout << std::format("rs1: {:05b}", inst.rs1) << std::endl;
+        std::cout << std::format("rs2: {:05b}", inst.rs2) << std::endl;
+        std::cout << std::format("funct7: {:07b}", inst.funct7) << std::endl;
         std::cout << std::format("imm: {:b}", inst.imm) << std::endl;
     }
-    uint32_t DECODER::signExtension(uint32_t value)
+    uint32_t DECODER::signExtension(int bit_width)
     {
-        return static_cast<uint32_t>(static_cast<int32_t>(value));
+        uint32_t value = this->inst.imm;
+        int sift_count = 32 - bit_width;
+        int32_t tmp = static_cast<int32_t>(value);
+        return static_cast<uint32_t>((tmp << sift_count) >> sift_count);
     }
 } // MFSCE
