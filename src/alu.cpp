@@ -115,7 +115,7 @@ namespace MFSCE
 
     void ALU::bge()
     {
-        if (static_cast<int32_t>(operand1_) > static_cast<int32_t>(operand2_))
+        if (static_cast<int32_t>(operand1_) >= static_cast<int32_t>(operand2_))
         {
             result_ = 1;
         }
@@ -127,7 +127,7 @@ namespace MFSCE
 
     void ALU::bgeu()
     {
-        if (operand1_ > operand2_)
+        if (operand1_ >= operand2_)
         {
             result_ = 1;
         }

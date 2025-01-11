@@ -24,23 +24,23 @@ namespace MFSCE
 
         while (1)
         {
-            pc.view();
+            // pc.view();
 
-            uint32_t instruction = ram.lw(pc.read());
+            //uint32_t instruction = ram.lw(pc.read());
 
-            std::cout << "Raw Instruction at PC 0x" << std::hex << pc.read()
-                     << ": 0x" << instruction << std::dec << std::endl;
+            //std::cout << "Raw Instruction at PC 0x" << std::hex << pc.read()
+            //          << ": 0x" << instruction << std::dec << std::endl;
 
             decoder.setInstructionType(ram.lw(pc.read()));
 
-            decoder.view();
+            //decoder.view();
 
             switch (instructionConverter(decoder.inst.opcode, decoder.inst.funct3, decoder.inst.funct7))
             {
             case instructionSet::LUI:
             {
 
-                reg.write(decoder.inst.rd, decoder.inst.imm << 20);
+                reg.write(decoder.inst.rd, decoder.inst.imm);
                 pc.write(pc.read() + 4);
             }
             break;
@@ -49,7 +49,7 @@ namespace MFSCE
             {
                 int32_t casted_imm = static_cast<int32_t>(decoder.inst.imm);
                 int32_t casted_pc = static_cast<int32_t>(pc.read());
-                uint32_t target_addr = (static_cast<uint32_t>((casted_imm << 12) + casted_pc));
+                uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
                 reg.write(decoder.inst.rd, target_addr);
                 pc.write(pc.read() + 4);
             }
@@ -82,7 +82,10 @@ namespace MFSCE
                     uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
                     pc.write(target_addr);
                 }
-                pc.write(pc.read() + 4);
+                else
+                {
+                    pc.write(pc.read() + 4);
+                }
             }
             break;
 
@@ -97,7 +100,10 @@ namespace MFSCE
                     uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
                     pc.write(target_addr);
                 }
-                pc.write(pc.read() + 4);
+                else
+                {
+                    pc.write(pc.read() + 4);
+                }
             }
             break;
 
@@ -112,7 +118,10 @@ namespace MFSCE
                     uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
                     pc.write(target_addr);
                 }
-                pc.write(pc.read() + 4);
+                else
+                {
+                    pc.write(pc.read() + 4);
+                }
             }
             break;
 
@@ -127,7 +136,10 @@ namespace MFSCE
                     uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
                     pc.write(target_addr);
                 }
-                pc.write(pc.read() + 4);
+                else
+                {
+                    pc.write(pc.read() + 4);
+                }
             }
             break;
 
@@ -142,7 +154,10 @@ namespace MFSCE
                     uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
                     pc.write(target_addr);
                 }
-                pc.write(pc.read() + 4);
+                else
+                {
+                    pc.write(pc.read() + 4);
+                }
             }
             break;
 
@@ -157,7 +172,10 @@ namespace MFSCE
                     uint32_t target_addr = (static_cast<uint32_t>(casted_imm + casted_pc));
                     pc.write(target_addr);
                 }
-                pc.write(pc.read() + 4);
+                else
+                {
+                    pc.write(pc.read() + 4);
+                }
             }
             break;
 
@@ -187,7 +205,7 @@ namespace MFSCE
             {
                 alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
                 alu.add();
-                uint32_t result_data = ram.lb(alu.get());
+                uint32_t result_data = ram.lw(alu.get());
                 reg.write(decoder.inst.rd, result_data);
                 pc.write(pc.read() + 4);
             }
@@ -195,6 +213,8 @@ namespace MFSCE
 
             case instructionSet::LBU:
             {
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
+                alu.add();
                 uint8_t tmp_val = static_cast<uint8_t>(ram.lb(alu.get()));
                 uint32_t result_data = static_cast<uint32_t>(tmp_val);
                 reg.write(decoder.inst.rd, result_data);
@@ -204,6 +224,8 @@ namespace MFSCE
 
             case instructionSet::LHU:
             {
+                alu.set(reg.read(decoder.inst.rs1), decoder.inst.imm);
+                alu.add();
                 uint16_t tmp_val = static_cast<uint16_t>(ram.lh(alu.get()));
                 uint32_t result_data = static_cast<uint32_t>(tmp_val);
                 reg.write(decoder.inst.rd, result_data);
@@ -414,7 +436,7 @@ namespace MFSCE
                 std::cerr << "Undefined order" << std::endl;
                 break;
             }
-            //reg.view();
+            // reg.view();
         }
     }
 
