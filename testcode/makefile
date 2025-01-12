@@ -1,46 +1,40 @@
-CC = riscv64-unknown-linux-gnu-gcc
-LD = riscv64-unknown-linux-gnu-ld
-OBJCOPY = riscv64-unknown-elf-objcopy
+CC       = riscv64-unknown-elf-gcc
+OBJCOPY  = riscv64-unknown-elf-objcopy
+CFLAGS   = -march=rv32i -mabi=ilp32
+LDFLAGS  = -march=rv32i -mabi=ilp32 -T link.ld -static -nostartfiles -nostdlib
 
-CFLAGS = -march=rv32ima -mabi=ilp32 -O2
-ASFLAGS = -march=rv32i -mabi=ilp32
-
-START_S = start.S
-TEST_C = test.c
-
-START_O = start.o
-TEST_O = test.o
-
-OBJS = $(START_O) $(TEST_O)
-
-LINK_SCRIPT = link.ld
-
-ELF = test.elf
+ELF      = test.elf
 TEXT_BIN = test_text.bin
-RODATA_BIN = test_rodata.bin
+RO_BIN   = test_rodata.bin
 DATA_BIN = test_data.bin
 
-all: $(TEXT_BIN) $(RODATA_BIN) $(DATA_BIN)
+ASM_SRC  = start.S
+C_SRC    = test.c
 
-$(START_O): $(START_S)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(TEST_O): $(TEST_C)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(ELF): $(OBJS) $(LINK_SCRIPT)
-	$(LD) $(OBJS) -T $(LINK_SCRIPT) -static -o $@
-
-$(TEXT_BIN): $(ELF)
-	$(OBJCOPY) -O binary --only-section=.text $< $@
-
-$(RODATA_BIN): $(ELF)
-	$(OBJCOPY) -O binary --only-section=.rodata $< $@
-
-$(DATA_BIN): $(ELF)
-	$(OBJCOPY) -O binary --only-section=.data $< $@
-
-clean:
-	rm -f $(START_O) $(TEST_O) $(ELF) $(TEXT_BIN) $(RODATA_BIN) $(DATA_BIN)
+OBJ_ASM  = start.o
+OBJ_C    = test.o
 
 .PHONY: all clean
+
+all: $(ELF) $(TEXT_BIN) $(RO_BIN) $(DATA_BIN)
+
+$(OBJ_ASM): $(ASM_SRC)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJ_C): $(C_SRC)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(ELF): $(OBJ_ASM) $(OBJ_C) link.ld
+	$(CC) $(LDFLAGS) -o $@ $(OBJ_ASM) $(OBJ_C)
+
+$(TEXT_BIN): $(ELF)
+	$(OBJCOPY) -O binary --only-section=.text $(ELF) $(TEXT_BIN)
+
+$(RO_BIN): $(ELF)
+	$(OBJCOPY) -O binary --only-section=.rodata $(ELF) $(RO_BIN)
+
+$(DATA_BIN): $(ELF)
+	$(OBJCOPY) -O binary --only-section=.data $(ELF) $(DATA_BIN)
+
+clean:
+	rm -f $(OBJ_ASM) $(OBJ_C) $(ELF) $(TEXT_BIN) $(RO_BIN) $(DATA_BIN)
