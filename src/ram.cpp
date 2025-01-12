@@ -4,6 +4,7 @@
 #include <format>
 #include <cstdint>
 #include <map>
+#include <vector>
 
 namespace MFSCE
 {
@@ -35,7 +36,8 @@ namespace MFSCE
         }
         else
         {
-            std::cout << (data & 0xff) << std::endl;
+            mmio_buffer_.push_back(static_cast<char>(data & 0xff));
+            mmioFlush();
         }
     }
 
@@ -46,8 +48,16 @@ namespace MFSCE
             std::cerr << "Alignment violation: Address must be 2-byte aligned for 'sh'" << std::endl;
             return;
         }
-        sb(address + 0, (data >> 0) & 0xff);
-        sb(address + 1, (data >> 8) & 0xff);
+        if (address < memory_map.MMIO_origin_ || address >= (memory_map.MMIO_origin_ + memory_map.MMIO_length_))
+        {
+            sb(address + 0, (data >> 0) & 0xff);
+            sb(address + 1, (data >> 8) & 0xff);
+        }
+        else
+        {
+            mmio_buffer_.push_back(static_cast<char>(data & 0xffff));
+            mmioFlush();
+        }
     }
 
     void RAM::sw(uint32_t address, uint32_t data)
@@ -57,10 +67,18 @@ namespace MFSCE
             std::cerr << "Alignment violation: Address must be 4-byte aligned for 'sw'" << std::endl;
             return;
         }
-        sb(address + 0, (data >> 0) & 0xff);
-        sb(address + 1, (data >> 8) & 0xff);
-        sb(address + 2, (data >> 16) & 0xff);
-        sb(address + 3, (data >> 24) & 0xff);
+        if (address < memory_map.MMIO_origin_ || address >= (memory_map.MMIO_origin_ + memory_map.MMIO_length_))
+        {
+            sb(address + 0, (data >> 0) & 0xff);
+            sb(address + 1, (data >> 8) & 0xff);
+            sb(address + 2, (data >> 16) & 0xff);
+            sb(address + 3, (data >> 24) & 0xff);
+        }
+        else
+        {
+            mmio_buffer_.push_back(static_cast<char>(data & 0xffffffff));
+            mmioFlush();
+        }
     }
 
     void RAM::view() const
@@ -74,6 +92,16 @@ namespace MFSCE
     bool RAM::alignmentCheck(uint32_t address, uint8_t alignment)
     {
         return (address % alignment) == 0;
+    }
+
+    void RAM::mmioFlush()
+    {
+        for (auto e : mmio_buffer_)
+        {
+            printf("%c", e);
+        }
+        printf("\n");
+        mmio_buffer_.clear();
     }
 
 } // MFSCE

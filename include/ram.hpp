@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <array>
 #include <map>
+#include <vector>
 
 namespace MFSCE
 {
@@ -37,6 +38,8 @@ namespace MFSCE
 
     private:
         std::map<uint32_t, uint8_t> mem_;
+        std::vector<char> mmio_buffer_;
         bool alignmentCheck(uint32_t, uint8_t);
+        void mmioFlush();
     };
 } //  MFSCE
