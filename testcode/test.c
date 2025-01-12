@@ -1,10 +1,14 @@
-volatile int mmio_data  __attribute__((section(".mmio")));
+#define len 14
+volatile char mmio_data[len] __attribute__((section(".mmio")));
 
 int main()
 {
-    int a = 1;
-    int b = 2;
-    int c =a + b;
-    mmio_data = 0x55;
+    const char *str = "Hello, world!";
+
+    for (int i = 0; i < len; i++)
+    {
+        mmio_data[i] = str[i];
+    }
+
     return 0;
 }
