@@ -9,6 +9,8 @@ Since MMIO is implemented, it is possible to pseudo-output characters via the te
 
 ## Testcode Build
 
+### Using Make Build
+
 ```
 cd testcode
 make
@@ -17,6 +19,16 @@ make
 clean
 ```
 make clean
+```
+### Manual Build
+
+```
+riscv64-unknown-elf-gcc -march=rv32imac -mabi=ilp32 -c -o start.o start.S
+riscv64-unknown-elf-gcc -march=rv32imac -mabi=ilp32 -c -o test.o test.c
+riscv64-unknown-elf-gcc -march=rv32imac -mabi=ilp32 -T link.ld -static -nostartfiles -o test.elf start.o test.o
+riscv64-unknown-elf-objcopy -O binary --only-section=.text test.elf test_text.bin
+riscv64-unknown-elf-objcopy -O binary --only-section=.rodata test.elf test_rodata.bin
+riscv64-unknown-elf-objcopy -O binary --only-section=.data test.elf test_data.bin
 ```
 
 ## Software Build
